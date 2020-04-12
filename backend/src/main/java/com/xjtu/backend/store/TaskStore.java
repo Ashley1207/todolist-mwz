@@ -42,12 +42,12 @@ public class TaskStore {
         
     }
 
-    public void writeTask(List<Task> task){
+    public void writeTask(List<Task> list){
         try {
             //创建一个filewrite对象，并将数据放在指定目录
             FileWriter fileWriter=new FileWriter(getFile().getAbsolutePath());
             //将task转化为json串并写入流中
-            fileWriter.write(getGson().toJson(task));
+            fileWriter.write(getGson().toJson(list));
             fileWriter.flush();//将数据刷新到目的地
             fileWriter.close();//关闭流资源
             
