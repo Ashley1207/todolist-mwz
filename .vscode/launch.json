@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RestServiceApplication",
+            "request": "launch",
+            "mainClass": "com.xjtu.backend.RestServiceApplication",
+            "projectName": "backend"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"
