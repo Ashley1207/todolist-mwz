@@ -1,21 +1,32 @@
 import React, { useState, Fragment, useEffect } from "react";
 import TodoItem from "./TodoItem";
-import { getTodos} from "./api/TodoApi";
+import { getTodos, addTodo} from "./api/TodoApi";
 import "./style.css";
 import _ from "lodash";
 
 const TodoList = () => {
+  const [inputValue, setInputValue] = useState("");
   const [list, setList] = useState(null);
-  const [error, setError] = useState(""); 
- 
+
   const handleLoadTasks = () => {
     getTodos()
       .then((response) => {
         setList(response);
       })
-      .catch((error) => {
-        setError("Unable to retrieve todo's");
-      });
+  };
+
+  const handleAddTask = () => {
+    if (inputValue === "") return;
+
+    const newTask = {
+      id: _.parseInt(list.length ? list[list.length - 1].id : 0) + 1,
+      content: inputValue,
+    };
+
+    addTodo(newTask).then(() => {
+      setList([...list, newTask]);
+      setInputValue("");
+    });
   };
 
   useEffect(() => {
@@ -25,10 +36,6 @@ const TodoList = () => {
   if (list === null) {
     return <div>Tasks is loading ...</div>;
   }
-
-  if (error) {
-    return <div>{error}</div>;
-  } 
 
   return (
     <Fragment>
@@ -48,10 +55,13 @@ const TodoList = () => {
         <input
             className="task-input"
             type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             data-testid="task-input"
          />
           <span
            className="text-button add-button"
+           onClick={handleAddTask} 
            data-testid="add-button" 
           >
            Add

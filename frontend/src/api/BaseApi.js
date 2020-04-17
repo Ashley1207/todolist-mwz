@@ -7,3 +7,13 @@ export const doRequest = (path, params) => {
 	 }
 	return fetch(basePath+path, mergedParams);
 }
+
+export const doRequestWithBody = (path, method, body) => {
+	return doRequest(path, { 
+	    headers: {
+	      'content-type': 'application/json'
+	    },
+	    method, 
+	    body: JSON.stringify(body)
+	})
+}
