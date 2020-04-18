@@ -23,6 +23,7 @@ const TodoItem = ({ item, onItemUpdate, onItemDelete }) => {
       <span
         className="delete-btn"
         className="text-button delete-button"
+        onClick={() => onItemDelete(item.id)}
         data-testid="delete-button"
       >
         Delete

@@ -17,3 +17,9 @@ export const doRequestWithBody = (path, method, body) => {
 	    body: JSON.stringify(body)
 	})
 }
+
+export const doDeleteRequest = (path) => {
+	return doRequest(path, { 
+	    method: 'delete'
+	})
+} 

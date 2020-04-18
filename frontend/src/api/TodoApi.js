@@ -1,4 +1,4 @@
-import {doRequest, doRequestWithBody} from './BaseApi'
+import {doRequest, doRequestWithBody, doDeleteRequest} from './BaseApi'
 
 const TODO_PATH = "/api/tasks";
 
@@ -10,3 +10,7 @@ const TODO_PATH = "/api/tasks";
 export const addTodo = (todo) => {
 	return doRequestWithBody(TODO_PATH, 'post', todo);
 }  
+
+export const deleteTodo = (todoId) => {	
+    return doDeleteRequest(TODO_PATH + "/" + todoId);
+} 

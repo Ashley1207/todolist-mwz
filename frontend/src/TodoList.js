@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import TodoItem from "./TodoItem";
-import { getTodos, addTodo} from "./api/TodoApi";
+import { getTodos, addTodo, deleteTodo} from "./api/TodoApi";
 import "./style.css";
 import _ from "lodash";
 
@@ -29,6 +29,11 @@ const TodoList = () => {
     });
   };
 
+  const handleDeleteTask = (id) =>
+    deleteTodo(id).then(() => {
+      setList(list.filter((item) => item.id !== id));
+    });
+
   useEffect(() => {
     handleLoadTasks();
   }, []);
@@ -48,6 +53,7 @@ const TodoList = () => {
               key={item.id}
               item={item}
               index={item.id}
+              onItemDelete={handleDeleteTask}
             />
           ))}
         </ul>
