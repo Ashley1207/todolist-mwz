@@ -11,11 +11,17 @@ const TodoItem = ({ item, onItemUpdate, onItemDelete }) => {
         value={todoItem.content}
         disabled={!isEditable}
         multiline
+        onChange={(e) => setTodoItem({ ...item, content: e.target.value })}
+        onBlur={() => {
+          onItemUpdate(todoItem);
+          setIsEditable(false);
+        }}
         margin="dense"
         data-testid="task-item-content"
       />
       <span
         className="text-button edit-button"
+        onClick={() => setIsEditable(!isEditable)}
         data-testid="edit-button"
       >
         Edit
