@@ -1,0 +1,127 @@
+.TodoList {
+  text-align: center;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .TodoList-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.TodoList-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.TodoList-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+ul {
+	text-align: center;
+	margin: 20px 5%;
+	border-radius: 10px;
+	border: 1px #bbb solid;
+}
+
+ul li {
+	line-height: 28px;
+	border-bottom:1px #bbb solid;
+	padding: 0 10px;
+}
+
+ul li:first-child {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+ul li:last-child {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+ul li:hover > .delete-btn {
+	display: block;
+}
+.container {
+	text-align: center;
+	background-color: #f8f7f0;
+	margin: 20px 30%;
+	padding: 10px 20px;
+	height: 100%;
+	border-radius: 10px;
+}
+
+
+
+
+
+.dialog {
+	text-align: left;
+	margin: 0 5%;
+	padding: 30px 0;
+}
+
+.dialog div {
+	overflow: hidden;	
+}
+
+h3 {
+	display: inline-block;
+	margin-left: 50px;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+input[type="text"] {
+	line-height: 30px;
+	float: center;
+	width: 73%;
+	border-radius: 7px;
+	border: none;
+	font-size: 16px;
+	box-sizing: border-box;
+	padding: 0 5px;
+	border: 1px #ccc solid;
+	outline: none;
+	box-shadow: 0 0 10px #ccc;
+}
+
+.text-button {
+  background-color: inherit;
+  padding: 14px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-block;
+  color: rgb(163, 70, 159);
+}
+
+/* On mouse-over */
+.text-button:hover {color: #4a1b4e;}
+
+@media screen and (max-width: 767px) {
+	.container {
+		margin: 10px 5%;
+	}
+
+	h3 {
+		margin-left: 0;
+	}
+}
+

@@ -1,78 +1,78 @@
-/*
- * @Descripttion: 
- * @Author: Ashley
- * @Date: 2020-04-12 18:12:00
- */
 package com.xjtu.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
-import com.xjtu.backend.store.TaskStore;
 import com.xjtu.backend.model.Task;
-import org.junit.jupiter.api.Test;
+import com.xjtu.backend.store.TaskStore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.verification.Times;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @SpringBootTest
 public class TaskServiceTest {
-    //mock和injectmock用法区别
     @Mock
     private TaskStore taskStore;
 
     @InjectMocks
-    private TaskService taskService=new TaskService();
+    private TaskService taskService = new TaskService();
 
     private ArrayList<Task> tasks;
 
     @BeforeEach
-    void setUp(){//先整体初始化
+    void setUp(){   //实现测试前的初始化工作
         tasks=new ArrayList<>();
     }
 
     @Test
-    public void saveTask(){
+    public void shouldSaveTask(){
+        //是指定当执行了这个方法的时候，返回 thenReturn 的值，相当于是对模拟对象的配置过程，为某些条件给定一个预期的返回值。
         when(taskStore.readTask()).thenReturn(tasks);
+
         Task savedTask=taskService.saveTask(new Task(1L, "newTask"));
-        assertNotNull(savedTask.getUpdateTime());
-        verify(taskStore).writeTask(any());
+        assertNotNull(savedTask.getUpdateTime());   //断言更新时间不为空
+        verify(taskStore).writeTask(any()); //验证taskStore的writeTask是否被调用
     }
 
     @Test
-    public void getAllTask(){
+    public void shouldGetAllTask(){
         when(taskStore.readTask()).thenReturn(tasks);
+
         List<Task> all=taskService.getAllTask();
+
         assertEquals(tasks,all);
     }
 
     @Test
-    public void FindTask(){
+    public void ShouldFindTask(){
         tasks.add(new Task(1L, "task"));
         when(taskStore.readTask()).thenReturn(tasks);
+
         Optional<Task> optionTask=taskService.findTask(1L);
+
         Task task=optionTask.get();
         assertEquals(1L, task.getId());
         assertEquals("task", task.getContent());
     }
 
     @Test
-    public void getEmptyTask(){
+    public void shouldGetEmptyTask(){
         when(taskStore.readTask()).thenReturn(tasks);
         Optional<Task> opTask=taskService.findTask(1L);
         assertFalse(opTask.isPresent());
     }
 
     @Test
-    public void updateTask(){
+    public void shouldUpdateTask(){
         tasks.add(new Task(1L, "task"));
         when(taskStore.readTask()).thenReturn(tasks);
         Optional<Task> opTask=taskService.updateTask(new Task(1L, "new Task"));
@@ -92,7 +92,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void deleteTask(){
+    public void shouldDeleteTask(){
         tasks.add(new Task(1L,"task"));
         when(taskStore.readTask()).thenReturn(tasks);
         Optional<Task> opTask=taskService.deleteTask(1L);
