@@ -35,12 +35,12 @@ public class TaskServiceTest {
 
     @Test
     public void shouldSaveTask() {
+        //是指定当执行了这个方法的时候，返回 thenReturn 的值，相当于是对模拟对象的配置过程，为某些条件给定一个预期的返回值。
         when(taskStore.readTasks()).thenReturn(tasks);
 
         Task savedTask = taskService.saveTask(new Task(1L, "newTask"));
-
-        assertNotNull(savedTask.getUpdatedAt());
-        verify(taskStore).writeTasks(any());
+        assertNotNull(savedTask.getUpdatedAt());//断言更新时间不为空
+        verify(taskStore).writeTasks(any());//验证taskStore的writeTask是否被调用
     }
 
     @Test
@@ -69,7 +69,6 @@ public class TaskServiceTest {
         when(taskStore.readTasks()).thenReturn(tasks);
 
         Optional<Task> optionalTask = taskService.find(1L);
-
         assertFalse(optionalTask.isPresent());
     }
 
@@ -77,9 +76,7 @@ public class TaskServiceTest {
     public void shouldUpdateTask() {
         tasks.add(new Task(1L, "task"));
         when(taskStore.readTasks()).thenReturn(tasks);
-
         Optional<Task> optionalTask = taskService.update(new Task(1L, "new task"));
-
         Task task = optionalTask.get();
         assertEquals(1L, task.getId());
         assertEquals("new task", task.getContent());
@@ -90,9 +87,7 @@ public class TaskServiceTest {
     @Test
     public void shouldNotUpdateTaskWhenNotExist() {
         when(taskStore.readTasks()).thenReturn(tasks);
-
         Optional<Task> optionalTask = taskService.update(new Task(1L, "new task"));
-
         assertFalse(optionalTask.isPresent());
         verify(taskStore, new Times(0)).writeTasks(any());
     }
@@ -101,9 +96,7 @@ public class TaskServiceTest {
     public void shouldDeleteTask() {
         tasks.add(new Task(1L, "task"));
         when(taskStore.readTasks()).thenReturn(tasks);
-
         Optional<Task> optionalTask = taskService.delete(1L);
-
         Task task = optionalTask.get();
         assertEquals(1L, task.getId());
         verify(taskStore).writeTasks(any());
@@ -112,9 +105,7 @@ public class TaskServiceTest {
     @Test
     public void shouldNotDeleteTaskWhenNotExist() {
         when(taskStore.readTasks()).thenReturn(tasks);
-
         Optional<Task> optionalTask = taskService.delete(1L);
-
         assertFalse(optionalTask.isPresent());
         verify(taskStore, new Times(0)).writeTasks(any());
     }
