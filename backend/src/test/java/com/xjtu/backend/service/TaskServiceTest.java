@@ -29,84 +29,93 @@ public class TaskServiceTest {
     private ArrayList<Task> tasks;
 
     @BeforeEach
-    void setUp(){   //实现测试前的初始化工作
-        tasks=new ArrayList<>();
+    void setUp() {
+        tasks = new ArrayList<>();
     }
 
     @Test
-    public void shouldSaveTask(){
-        //是指定当执行了这个方法的时候，返回 thenReturn 的值，相当于是对模拟对象的配置过程，为某些条件给定一个预期的返回值。
-        when(taskStore.readTask()).thenReturn(tasks);
+    public void shouldSaveTask() {
+        when(taskStore.readTasks()).thenReturn(tasks);
 
-        Task savedTask=taskService.saveTask(new Task(1L, "newTask"));
-        assertNotNull(savedTask.getUpdateTime());   //断言更新时间不为空
-        verify(taskStore).writeTask(any()); //验证taskStore的writeTask是否被调用
+        Task savedTask = taskService.saveTask(new Task(1L, "newTask"));
+
+        assertNotNull(savedTask.getUpdatedAt());
+        verify(taskStore).writeTasks(any());
     }
 
     @Test
-    public void shouldGetAllTask(){
-        when(taskStore.readTask()).thenReturn(tasks);
+    public void shouldGetAllTasks() {
+        when(taskStore.readTasks()).thenReturn(tasks);
 
-        List<Task> all=taskService.getAllTask();
+        List<Task> all = taskService.getAll();
 
-        assertEquals(tasks,all);
+        assertEquals(tasks, all);
     }
 
     @Test
-    public void ShouldFindTask(){
+    public void shouldFindTask() {
         tasks.add(new Task(1L, "task"));
-        when(taskStore.readTask()).thenReturn(tasks);
+        when(taskStore.readTasks()).thenReturn(tasks);
 
-        Optional<Task> optionTask=taskService.findTask(1L);
+        Optional<Task> optionalTask = taskService.find(1L);
 
-        Task task=optionTask.get();
+        Task task = optionalTask.get();
         assertEquals(1L, task.getId());
         assertEquals("task", task.getContent());
     }
 
     @Test
-    public void shouldGetEmptyTask(){
-        when(taskStore.readTask()).thenReturn(tasks);
-        Optional<Task> opTask=taskService.findTask(1L);
-        assertFalse(opTask.isPresent());
+    public void shouldGetEmptyTask() {
+        when(taskStore.readTasks()).thenReturn(tasks);
+
+        Optional<Task> optionalTask = taskService.find(1L);
+
+        assertFalse(optionalTask.isPresent());
     }
 
     @Test
-    public void shouldUpdateTask(){
+    public void shouldUpdateTask() {
         tasks.add(new Task(1L, "task"));
-        when(taskStore.readTask()).thenReturn(tasks);
-        Optional<Task> opTask=taskService.updateTask(new Task(1L, "new Task"));
-        Task task=opTask.get();
+        when(taskStore.readTasks()).thenReturn(tasks);
+
+        Optional<Task> optionalTask = taskService.update(new Task(1L, "new task"));
+
+        Task task = optionalTask.get();
         assertEquals(1L, task.getId());
-        assertEquals("new Task", task.getContent());
-        assertNotNull(task.getUpdateTime());
-        verify(taskStore).writeTask(any());
+        assertEquals("new task", task.getContent());
+        assertNotNull(task.getUpdatedAt());
+        verify(taskStore).writeTasks(any());
     }
 
     @Test
-    public void shouldNotUpdateTaskWhenNotExit(){
-        when(taskStore.readTask()).thenReturn(tasks);
-        Optional<Task> opTask=taskService.updateTask(new Task(1L, "new Task"));
-        assertFalse(opTask.isPresent());
-        verify(taskStore,new Times(0)).writeTask(any());
+    public void shouldNotUpdateTaskWhenNotExist() {
+        when(taskStore.readTasks()).thenReturn(tasks);
+
+        Optional<Task> optionalTask = taskService.update(new Task(1L, "new task"));
+
+        assertFalse(optionalTask.isPresent());
+        verify(taskStore, new Times(0)).writeTasks(any());
     }
 
     @Test
-    public void shouldDeleteTask(){
-        tasks.add(new Task(1L,"task"));
-        when(taskStore.readTask()).thenReturn(tasks);
-        Optional<Task> opTask=taskService.deleteTask(1L);
-        Task task=opTask.get();
+    public void shouldDeleteTask() {
+        tasks.add(new Task(1L, "task"));
+        when(taskStore.readTasks()).thenReturn(tasks);
+
+        Optional<Task> optionalTask = taskService.delete(1L);
+
+        Task task = optionalTask.get();
         assertEquals(1L, task.getId());
-        verify(taskStore).writeTask(any());
+        verify(taskStore).writeTasks(any());
     }
 
     @Test
-    public void shouldNotDeleteTaskWhenNotExist(){
-        when(taskStore.readTask()).thenReturn(tasks);
-        Optional<Task> opTask=taskService.deleteTask(1L);
-        assertFalse(opTask.isPresent());
-        verify(taskStore,new Times(0)).writeTask(any());
-    }
+    public void shouldNotDeleteTaskWhenNotExist() {
+        when(taskStore.readTasks()).thenReturn(tasks);
 
+        Optional<Task> optionalTask = taskService.delete(1L);
+
+        assertFalse(optionalTask.isPresent());
+        verify(taskStore, new Times(0)).writeTasks(any());
+    }
 }

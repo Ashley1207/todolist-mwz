@@ -23,53 +23,49 @@ import java.util.ArrayList;
 
 @Service
 public class TaskService {
-
     @Autowired
-    public TaskStore taskstore;
+    public TaskStore store;
 
-    public List<Task> getAllTask() {
-        return taskstore.readTask();
+    public List<Task> getAll() {
+        return store.readTasks();
     }
 
-    public Task saveTask(Task task){
-        List<Task> tasks=new ArrayList<>(taskstore.readTask());
-        task.setUpdateTime();
+    public Task saveTask(Task task) {
+        List<Task> tasks = new ArrayList<>(store.readTasks());
+        task.setUpdatedAt();
         tasks.add(task);
-        taskstore.writeTask(tasks);
+        store.writeTasks(tasks);
         return task;
-
     }
 
-    public Optional<Task> findTask(long id){
+    public Optional<Task> find(Long id) {
         //stream流：stream of elenment------->filter->sorted->map->collect
-        return taskstore.readTask().stream().filter(task -> task.getId()==id).findAny();
+        return store.readTasks().stream().filter(task -> task.getId() == id).findAny();
     }
 
-    public Optional<Task> updateTask(Task task){
-        List<Task> tasks=new ArrayList<>(taskstore.readTask());
-        Optional<Task> any=tasks.stream().filter(task1->task1.getId()==task.getId()).findAny();
-        if(any.isPresent()){
+    public Optional<Task> update(Task task) {
+        List<Task> tasks = new ArrayList<>(store.readTasks());
+        Optional<Task> any = tasks.stream().filter(task1 -> task1.getId() == task.getId()).findAny();
+        if (any.isPresent()) {
             any.get().setContent(task.getContent());
-            any.get().setUpdateTime();
-            taskstore.writeTask(tasks);
+            any.get().setUpdatedAt();
+            store.writeTasks(tasks);
         }
         return any;
-
     }
-    /**
+   /**
      * @name: Optional类：
      * 
      * @param {type} 
      * @return: 
      */
-    public Optional<Task> deleteTask(Long id) {
-        List<Task> tasks = taskstore.readTask();
+    public Optional<Task> delete(Long id) {
+        List<Task> tasks = store.readTasks();
         Optional<Task> any = tasks.stream().filter(task1 -> task1.getId() == id).findAny();
         if (any.isPresent()) {
-            taskstore.writeTask(tasks.stream().filter(task -> task.getId() != id).collect(Collectors.toList()));
+            store.writeTasks(tasks.stream().filter(task -> task.getId() != id).collect(Collectors.toList()));
             return any;
         }
         return any;
     }
-
 }

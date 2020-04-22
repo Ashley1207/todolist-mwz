@@ -32,56 +32,55 @@ import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 
-@RestController // 标记这个类是controller
-@RequestMapping("/api/tasks")//映射http请求，指定访问的Url路径，对应浏览器访问的地址，访问该路径则执行以下函数
+@RestController// 标记这个类是controller
+@RequestMapping( "/api/tasks" )//映射http请求，指定访问的Url路径，对应浏览器访问的地址，访问该路径则执行以下函数
 public class TaskController {
     @Autowired
     public TaskService taskService;
-    //get请求，返回json数据
-    @GetMapping(produces = "/application/json")
-    public List<Task> listTask(){
-        return taskService.getAllTask();
+     //get请求，返回json数据
+    @GetMapping(produces = "application/json")
+    public List<Task> list() {
+        return taskService.getAll();
     }
-    /**
+      /**
          * @name: ResponseEntity:处理http响应
          * @PathVariable：接受请求路径中id的值
          * @param {type} 
          * @return: 返回id
          */
     @GetMapping("/{id}")
-    public ResponseEntity<Task> findTask(@PathVariable long id) {
-        
-        return ResponseEntity.of(taskService.findTask(id));
+    public ResponseEntity<Task> find(@PathVariable Long id) {
+        return ResponseEntity.of(taskService.find(id));
     }
 
-    @PostMapping(consumes = "application/json",produces = "application/json")
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        //TODO: process POST request
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Task> create(@RequestBody Task task) {
+        //TODO: process PUT request
         taskService.saveTask(task);
-        URI location=ServletUriComponentsBuilder.fromCurrentRequest().path("/tasks/{id}")
-                      .buildAndExpand(task.getId()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/tasks/{id}")
+                .buildAndExpand(task.getId())
+                .toUri();
         return ResponseEntity.created(location).build();
     }
-    /**
+     /**
      * postmapping:倾向于添加信息
      * putmapping:倾向于更新信息
      */
-    @PutMapping(path="/{id}",consumes = "application/json",produces = "application/json")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+
+    @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody Task task) {
         //TODO: process PUT request
-        Optional<Task> updateTask=taskService.updateTask(new Task(id,task.getContent()));
-        
-        return ResponseEntity.of(updateTask);
+        Optional<Task> updatedTask = taskService.update(new Task(id, task.getContent()));
+        return ResponseEntity.of(updatedTask);
     }
-    
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity deleteTask(@PathVariable Long id){
-        Optional<Task> deleteTask=taskService.deleteTask(id);
-        if(deleteTask.isPresent()){
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        Optional<Task> deletedTask = taskService.delete(id);
+        if (deletedTask.isPresent()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
-
-
 }

@@ -6,34 +6,40 @@
 package com.xjtu.backend.model;
 
 import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Component;
 //import org.apache.tomcat.jni.Local;
+@Component
 public class Task {
     private long id;
-    private String content;//todo内容
-    private LocalDateTime updateAt;//TODO时间
-    //构造器
-    public Task(){
+    private String content;
+    private LocalDateTime updatedAt;
+
+    public Task() {
     }
-    //重写构造器，实现特定功能
-    public Task(long id,String content){
-        this.id=id;
-        this.content=content;
+
+    public Task(Long id, String content) {
+        this.id = id;
+        this.content = content;
     }
-    public long getId(){
+
+    public long getId() {
         return id;
     }
-    public String getContent(){
+
+    public String getContent() {
         return content;
     }
-    public LocalDateTime getUpdateTime(){
-        return updateAt;
-    }
-    public void setUpdateTime(){
-        this.updateAt= LocalDateTime.now();
-    }
-    public void setContent(String content){
-        this.content=content;
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

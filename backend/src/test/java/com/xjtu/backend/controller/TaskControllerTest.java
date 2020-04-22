@@ -44,33 +44,33 @@ public class TaskControllerTest {
 
     @Test
     public void shouldGetAll() throws Exception {
-        when(service.getAllTask()).thenReturn(tasks);
+        when(service.getAll()).thenReturn(tasks);
         this.mockMvc.perform(get("/api/tasks")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].content").value("a"));
     }
 
     @Test
     public void shouldFindTaskByIdIfPresent() throws Exception {
-        when(service.findTask(3L)).thenReturn(Optional.of(new Task(3L, "X")));
+        when(service.find(3L)).thenReturn(Optional.of(new Task(3L, "X")));
         this.mockMvc.perform(get("/api/tasks/3")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("X"));
     }
 
     @Test
     public void shouldReturnNotFoundWhenFindByIdIfNotPresent() throws Exception {
-        when(service.findTask(3L)).thenReturn(Optional.empty());
+        when(service.find(3L)).thenReturn(Optional.empty());
         this.mockMvc.perform(get("/api/tasks/3")).andDo(print()).andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldDeleteWhenExist() throws Exception {
-        when(service.deleteTask(2L)).thenReturn(Optional.of(new Task(2L, "B")));
+        when(service.delete(2L)).thenReturn(Optional.of(new Task(2L, "B")));
         this.mockMvc.perform(delete("/api/tasks/2")).andDo(print()).andExpect(status().isNoContent());
     }
 
     @Test
     public void shouldReturnNotFoundWhenDeleteIfNotPresent() throws Exception {
-        when(service.deleteTask(2L)).thenReturn(Optional.empty());
+        when(service.delete(2L)).thenReturn(Optional.empty());
         this.mockMvc.perform(delete("/api/tasks/2")).andDo(print()).andExpect(status().isNotFound());
     }
 
@@ -88,7 +88,7 @@ public class TaskControllerTest {
     public void shouldChangeTaskById() throws Exception {
         Task task = new Task(2L, "updated");
         Task updated = new Task(1L, "updated");
-        when(service.updateTask(any())).thenReturn(Optional.of(updated));
+        when(service.update(any())).thenReturn(Optional.of(updated));
         this.mockMvc.perform(put("/api/tasks/1")
                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(task)))
                 .andDo(print()).andExpect(status().isOk())
@@ -98,7 +98,7 @@ public class TaskControllerTest {
     @Test
     public void shouldReturnNotFoundWhenChangeTaskButDoesNotExit() throws Exception {
         Task task = new Task(2L, "updated");
-        when(service.updateTask(any())).thenReturn(Optional.empty());
+        when(service.update(any())).thenReturn(Optional.empty());
         this.mockMvc.perform(put("/api/tasks/1")
                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(task)))
                 .andDo(print()).andExpect(status().isNotFound());

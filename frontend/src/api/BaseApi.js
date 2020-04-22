@@ -1,4 +1,9 @@
-const basePath = (process.env.NODE_ENV === 'production' ? '/todo-list':'');
+/*
+ * @Descripttion: 
+ * @Author: Ashley
+ * @Date: 2020-04-21 17:28:05
+ */
+const basePath = (process.env.NODE_ENV === 'production' ? '/todolist-demo':'');
 
 export const doRequest = (path, params) => {
 	let mergedParams = {

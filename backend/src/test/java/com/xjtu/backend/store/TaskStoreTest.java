@@ -1,3 +1,8 @@
+/*
+ * @Descripttion: 
+ * @Author: Ashley
+ * @Date: 2020-04-21 17:28:05
+ */
 package com.xjtu.backend.store;
 
 import com.xjtu.backend.model.Task;
@@ -15,41 +20,38 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class TaskStoreTest {
-
     @Autowired
     private TaskStore taskStore;
-    //在每个测试之后执行
+
     @AfterEach
     void tearDown() {
-        taskStore.writeTask(Arrays.asList(createTask(1L, "test")));
+        taskStore.writeTasks(Arrays.asList(createTask(1L, "test")));
     }
 
     @Test
-    public void testReadTask() {
-        List<Task> tasks=taskStore.readTask();
-        assertEquals(1, tasks.size());  //判断readTask()方法得到的List集合个数是否为1
-        assertEquals(1L, tasks.get(0).getId()); //判断tasks对象中第一个的id是否为1
-        assertEquals("test", tasks.get(0).getContent());    //判断tasks对象中第一个的内容是否为test
-        assertEquals(LocalDateTime.of(2020, 4, 12, 0, 0), tasks.get(0).getUpdateTime());//判断时间
-        
+    public void shouldReadTasks() {
+        List<Task> tasks = taskStore.readTasks();
+        assertEquals(1, tasks.size());
+        assertEquals(1L, tasks.get(0).getId());
+        assertEquals("test", tasks.get(0).getContent());
+        assertEquals(LocalDateTime.of(2020, 4, 5, 0, 0), tasks.get(0).getUpdatedAt());
     }
 
     @Test
-    public void testWriteTask(){
-        List<Task> tasks=Arrays.asList(createTask(1L, "task 1"),createTask(2L, "task 2"));     //列表存入两个新建Task对象
-        taskStore.writeTask(tasks); //写入文件
-        List<Task> tasksInStore=taskStore.readTask();//读取文件中的Task
+    public void shouldWriteTasks() {
+        List<Task> tasks = Arrays.asList(createTask(1L, "task 1"), createTask(2L, "task 2"));
+
+        taskStore.writeTasks(tasks);
+
+        List<Task> tasksInStore = taskStore.readTasks();
         assertEquals(2, tasksInStore.size());
-        assertNotNull(tasksInStore.get(1).getUpdateTime());
+        assertNotNull(tasksInStore.get(1).getUpdatedAt());
         assertEquals("task 2", tasksInStore.get(1).getContent());
-
     }
 
-    private Task createTask(long l, String test) { //创建一个Task对象
-        Task task=new Task(l,test);
-        task.setUpdateTime();
+    private Task createTask(long l, String test) {
+        Task task = new Task(l, test);
+        task.setUpdatedAt();
         return task;
     }
-
-
 }
